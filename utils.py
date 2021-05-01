@@ -19,7 +19,6 @@ def pprint(chains):
             else:
                 print(f'{k:15}{v}')
     print(f'{"*"*25}')
-
 # print(sorted_dict_by_key(block))
 
 

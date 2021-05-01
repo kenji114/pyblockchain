@@ -14,7 +14,6 @@ logger = logging.getLogger(__name__)
 # logging.info('test2')
 # print('test2')
 
-
 class BlockChain(object):
 
     def __init__(self, blockchain_address=None):
