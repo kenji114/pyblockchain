@@ -99,7 +99,7 @@ if __name__=='__main__':
     block_chain.mining()
     # previous_hash = block_chain.hash(block_chain.chain[-1])
     # nonce = block_chain.proof_of_work()
-    # block_chain.create_block(nonce, previous_minig)
+    # block_chain.create_block(nonce, previous_mining)
     utils.pprint(block_chain.chain)
 
     block_chain.add_transaction('C', 'D', 2.0)
