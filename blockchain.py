@@ -11,8 +11,6 @@ MINING_REWARD = 1.0
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 logger = logging.getLogger(__name__)
-
-
 # logging.info('test2')
 # print('test2')
 
@@ -32,12 +30,12 @@ class BlockChain(object):
             'previous_hash': previous_hash
         })
         self.chain.append(block)
-        self.transaction_pool = []  # 空にする
+        self.transaction_pool = [] # 空にする
 
         return block
 
     def hash(self, block):
-        sorted_block = json.dumps(block, sort_keys=True)  # sortされているかどうかを、ここでもダブルチェック。ここでテキスト化もする。
+        sorted_block = json.dumps(block, sort_keys=True) # sortされているかどうかを、ここでもダブルチェック。ここでテキスト化もする。
         return hashlib.sha256(sorted_block.encode()).hexdigest()
 
     def add_transaction(self, sender_blockchain_address,
@@ -51,14 +49,15 @@ class BlockChain(object):
         return True
 
     def valid_proof(self, transactions, previous_hash, nonce,
-                    difficulty=MINING_DIFFICULTY):
+                    difficulty = MINING_DIFFICULTY):
         guess_block = utils.sorted_dict_by_key({
             'transactions': transactions,
             'nonce': nonce,
             'previous_hash': previous_hash
         })
         guess_hash = self.hash(guess_block)
-        return guess_hash[:difficulty] == '0' * difficulty
+        return guess_hash[:difficulty] == '0'*difficulty
+
 
     def proof_of_work(self):
         transactions = self.transaction_pool.copy()
@@ -70,7 +69,7 @@ class BlockChain(object):
 
     def mining(self):
         self.add_transaction(
-            sender_blockchain_address=MINING_SENDER,
+            sender_blockchain_address = MINING_SENDER,
             recipient_blockchain_address=self.blockchain_address,
             value=MINING_REWARD)
         nonce = self.proof_of_work()
@@ -80,8 +79,8 @@ class BlockChain(object):
         return True
 
     def calculate_total_amount(self, blockchain_address):
-        total_amount = 0.0
-        for block in self.chain:  # 辞書型をこうやってたどってくれる。
+        total_amount=0.0
+        for block in self.chain:
             for transaction in block['transactions']:
                 value = float(transaction['value'])
                 if blockchain_address == transaction['recipient_blockchain_address']:
@@ -91,7 +90,7 @@ class BlockChain(object):
         return total_amount
 
 
-if __name__ == '__main__':
+if __name__=='__main__':
     my_blockchain_address = 'my_blockchain_address'
     block_chain = BlockChain(blockchain_address=my_blockchain_address)
     utils.pprint(block_chain.chain)
@@ -114,3 +113,4 @@ if __name__ == '__main__':
     print('my', block_chain.calculate_total_amount(my_blockchain_address))
     print('C', block_chain.calculate_total_amount('C'))
     print('D', block_chain.calculate_total_amount('D'))
+
