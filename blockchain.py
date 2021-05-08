@@ -1,11 +1,10 @@
-import json
 import hashlib
+import json
 import logging
 import sys
 import time
 
-from ecdsa import NIST256p
-from ecdsa import VerifyingKey
+from ecdsa import NIST256p, VerifyingKey
 
 import utils
 
@@ -42,7 +41,8 @@ class BlockChain(object):
         return block
 
     def hash(self, block):
-        sorted_block = json.dumps(block, sort_keys=True)  # sortされているかどうかを、ここでもダブルチェック。ここでテキスト化もする。
+        # sortされているかどうかを、ここでもダブルチェック。ここでテキスト化もする。
+        sorted_block = json.dumps(block, sort_keys=True)
         return hashlib.sha256(sorted_block.encode()).hexdigest()
 
     def add_transaction(self, sender_blockchain_address,
@@ -62,19 +62,23 @@ class BlockChain(object):
         #    logger.error({'action': 'add_transaction', 'error':'no_value'})
         #    return False
 
-        if self.verify_transaction_signature(sender_public_key, signature, transaction):
+        if self.verify_transaction_signature(
+                sender_public_key, signature, transaction):
             self.transaction_pool.append(transaction)
             return True
         return False
 
-    def verify_transaction_signature(self,
-                                     sender_public_key, signature, transaction):
+    def verify_transaction_signature(
+            self,
+            sender_public_key,
+            signature,
+            transaction):
         sha256 = hashlib.sha256()
         sha256.update(str(transaction).encode('utf-8'))
-        message = sha256.digest()  ## transaction
-        signature_bytes = bytes().fromhex(signature)  ## signature
+        message = sha256.digest()  # transaction
+        signature_bytes = bytes().fromhex(signature)  # signature
         verifying_key = VerifyingKey.from_string(
-            bytes().fromhex(sender_public_key), curve=NIST256p)  ## public_key
+            bytes().fromhex(sender_public_key), curve=NIST256p)  # public_key
         verified_key = verifying_key.verify(signature_bytes, message)
         return verified_key
 
