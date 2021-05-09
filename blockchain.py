@@ -45,6 +45,20 @@ class BlockChain(object):
         sorted_block = json.dumps(block, sort_keys=True)
         return hashlib.sha256(sorted_block.encode()).hexdigest()
 
+    def create_transaction(self, sender_blockchain_address,
+                           recipient_blockchain_address, value,
+                           sender_public_key, signature):
+        is_transacted = self.add_transaction(
+            sender_blockchain_address,
+            recipient_blockchain_address,
+            value,
+            sender_public_key,
+            signature)
+
+        # TODO
+        # Sync
+        return is_transacted
+
     def add_transaction(self, sender_blockchain_address,
                         recipient_blockchain_address, value,
                         sender_public_key=None, signature=None):
